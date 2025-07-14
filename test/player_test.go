@@ -126,6 +126,42 @@ var (
 			},
 		},
 	}
+	SortTestsAssert_TestSortGoalsAndMissles = []SortTest{
+		{
+			give: []player.Player{
+				{Name: "Andrey", Goals: 2, Misses: 0, Assists: 5, Rating: 4.5},   //2
+				{Name: "Zakhar", Goals: 3, Misses: 2, Assists: 1, Rating: 1.75},  //1.5
+				{Name: "Denchik", Goals: 1, Misses: 2, Assists: 1, Rating: 0.75}, //0.5
+				{Name: "Ronaldo", Goals: 5, Misses: 2, Assists: 1, Rating: 2.75}, //2.5
+				{Name: "John", Goals: 2, Misses: 2, Assists: 1, Rating: 1.25},    //1
+			},
+			want: []player.Player{
+				{Name: "Ronaldo", Goals: 5, Misses: 2, Assists: 1, Rating: 2.75}, //2.5
+				{Name: "Andrey", Goals: 2, Misses: 0, Assists: 5, Rating: 4.5},   //2
+				{Name: "Zakhar", Goals: 3, Misses: 2, Assists: 1, Rating: 1.75},  //1.5
+				{Name: "John", Goals: 2, Misses: 2, Assists: 1, Rating: 1.25},    //1
+				{Name: "Denchik", Goals: 1, Misses: 2, Assists: 1, Rating: 0.75}, //0.5
+			},
+		},
+		{
+			give: []player.Player{
+				{Name: "Kirill", Goals: 4, Misses: 2, Assists: 1, Rating: 2.25},  //2
+				{Name: "Andrey", Goals: 2, Misses: 0, Assists: 5, Rating: 4.5},   //2
+				{Name: "Zakhar", Goals: 3, Misses: 2, Assists: 1, Rating: 1.75},  //1.5
+				{Name: "Denchik", Goals: 1, Misses: 2, Assists: 1, Rating: 0.75}, //0.5
+				{Name: "Ronaldo", Goals: 5, Misses: 2, Assists: 1, Rating: 2.75}, //2.5
+				{Name: "John", Goals: 0, Misses: 2, Assists: 1, Rating: 1.25},    //0
+			},
+			want: []player.Player{
+				{Name: "Ronaldo", Goals: 5, Misses: 2, Assists: 1, Rating: 2.75}, //2.5
+				{Name: "Andrey", Goals: 2, Misses: 0, Assists: 5, Rating: 4.5},   //2
+				{Name: "Kirill", Goals: 4, Misses: 2, Assists: 1, Rating: 2.25},  //2
+				{Name: "Zakhar", Goals: 3, Misses: 2, Assists: 1, Rating: 1.75},  //1.5
+				{Name: "Denchik", Goals: 1, Misses: 2, Assists: 1, Rating: 0.75}, //0.5
+				{Name: "John", Goals: 0, Misses: 2, Assists: 1, Rating: 1.25},    //0
+			},
+		},
+	}
 )
 
 func TestSortGoals(t *testing.T) {
@@ -142,6 +178,17 @@ func TestSortGoals(t *testing.T) {
 func TestSortRating(t *testing.T) {
 	for _, tc := range SortTestsAssert_TestSortRating {
 		got := player.SortRating(tc.give)
+		for i, gv := range got {
+			if tc.want[i] != gv {
+				t.Fatalf("%s", formatError(player.SortGoals, tc.give, gv, tc.want[i]))
+			}
+		}
+	}
+}
+
+func TestSortGoalsAndMissles(t *testing.T) {
+	for _, tc := range SortTestsAssert_TestSortGoalsAndMissles {
+		got := player.SortGoalsAndMissles(tc.give)
 		for i, gv := range got {
 			if tc.want[i] != gv {
 				t.Fatalf("%s", formatError(player.SortGoals, tc.give, gv, tc.want[i]))

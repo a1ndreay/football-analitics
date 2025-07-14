@@ -2,6 +2,7 @@ package player
 
 import (
 	"slices"
+	"strings"
 )
 
 type Player struct {
@@ -32,17 +33,26 @@ func SortGoals(players []Player) []Player {
 	return goalsSort(players)
 }
 
+func SortRating(players []Player) []Player {
+	return ratingSort(players)
+}
+
+func SortGoalsAndMissles(players []Player) []Player {
+	return gmSort(players)
+}
+
 func goalsSort(players []Player) []Player {
 	slices.SortFunc(players, byGoalsDesc)
 	return players
 }
 
-func SortRating(players []Player) []Player {
-	return ratingSort(players)
-}
-
 func ratingSort(players []Player) []Player {
 	slices.SortFunc(players, byRatingDesc)
+	return players
+}
+
+func gmSort(players []Player) []Player {
+	slices.SortFunc(players, byGoalsAndMisslesDesc)
 	return players
 }
 
@@ -53,7 +63,7 @@ func byGoalsDesc(a, e Player) int {
 	case a.Goals > e.Goals:
 		return -1
 	default:
-		return 0
+		return byName(a, e)
 	}
 }
 
@@ -63,6 +73,57 @@ func byRatingDesc(a, e Player) int {
 		return 1
 	case a.Rating > e.Rating:
 		return -1
+	default:
+		return byName(a, e)
+	}
+}
+
+func byGoalsAndMisslesDesc(a, e Player) int {
+	if a.Misses != 0 && e.Misses != 0 {
+		switch {
+		case float64(a.Goals)/float64(a.Misses) < float64(e.Goals)/float64(e.Misses):
+			return 1
+		case float64(a.Goals)/float64(a.Misses) > float64(e.Goals)/float64(e.Misses):
+			return -1
+		default:
+			return byName(a, e)
+		}
+	} else if e.Misses == 0 {
+		switch {
+		case float64(a.Goals)/float64(a.Misses) < float64(e.Goals):
+			return 1
+		case float64(a.Goals)/float64(a.Misses) > float64(e.Goals):
+			return -1
+		default:
+			return byName(a, e)
+		}
+	} else if a.Misses == 0 {
+		switch {
+		case float64(a.Goals) < float64(e.Goals)/float64(e.Misses):
+			return 1
+		case float64(a.Goals) > float64(e.Goals)/float64(e.Misses):
+			return -1
+		default:
+			return byName(a, e)
+		}
+	} else {
+		switch {
+		case float64(a.Goals) < float64(e.Goals):
+			return 1
+		case float64(a.Goals) > float64(e.Goals):
+			return -1
+		default:
+			return byName(a, e)
+		}
+	}
+}
+
+func byName(a, e Player) int {
+	switch {
+	case strings.Compare(a.Name, e.Name) < 0:
+		return -1
+	case strings.Compare(a.Name, e.Name) > 0:
+		return 1
 	default:
 		return 0
 	}
