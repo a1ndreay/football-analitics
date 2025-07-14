@@ -1,6 +1,8 @@
 package player
 
-import "slices"
+import (
+	"slices"
+)
 
 type Player struct {
 	Name    string
@@ -35,11 +37,31 @@ func goalsSort(players []Player) []Player {
 	return players
 }
 
+func SortRating(players []Player) []Player {
+	return ratingSort(players)
+}
+
+func ratingSort(players []Player) []Player {
+	slices.SortFunc(players, byRatingDesc)
+	return players
+}
+
 func byGoalsDesc(a, e Player) int {
 	switch {
 	case a.Goals < e.Goals:
 		return 1
 	case a.Goals > e.Goals:
+		return -1
+	default:
+		return 0
+	}
+}
+
+func byRatingDesc(a, e Player) int {
+	switch {
+	case a.Rating < e.Rating:
+		return 1
+	case a.Rating > e.Rating:
 		return -1
 	default:
 		return 0

@@ -48,50 +48,100 @@ func TestNewPlayer(t *testing.T) {
 	}
 }
 
-func TestSortGoals(t *testing.T) {
-	type Test struct {
-		give []player.Player
-		want []player.Player
-	}
-	tests := []Test{
-		{
-			give: []player.Player{
-				player.Player{Name: "Andrey", Goals: 2, Misses: 0, Assists: 5, Rating: 4.5},
-				player.Player{Name: "Zakhar", Goals: 3, Misses: 2, Assists: 1, Rating: 1.75},
-				player.Player{Name: "Denchik", Goals: 1, Misses: 2, Assists: 1, Rating: 1.75},
-				player.Player{Name: "Ronaldo", Goals: 5, Misses: 2, Assists: 1, Rating: 1.75},
-				player.Player{Name: "John", Goals: 2, Misses: 2, Assists: 1, Rating: 1.75},
-			},
-			want: []player.Player{
-				player.Player{Name: "Ronaldo", Goals: 5, Misses: 2, Assists: 1, Rating: 1.75},
-				player.Player{Name: "Zakhar", Goals: 3, Misses: 2, Assists: 1, Rating: 1.75},
-				player.Player{Name: "Andrey", Goals: 2, Misses: 0, Assists: 5, Rating: 4.5},
-				player.Player{Name: "John", Goals: 2, Misses: 2, Assists: 1, Rating: 1.75},
-				player.Player{Name: "Denchik", Goals: 1, Misses: 2, Assists: 1, Rating: 1.75},
-			},
-		},
-		{
-			give: []player.Player{
-				player.Player{Name: "Andrey", Goals: 2, Misses: 0, Assists: 5, Rating: 4.5},
-				player.Player{Name: "Zakhar", Goals: 3, Misses: 2, Assists: 1, Rating: 1.75},
-				player.Player{Name: "Denchik", Goals: 1, Misses: 2, Assists: 1, Rating: 1.75},
-				player.Player{Name: "Kirill", Goals: 4, Misses: 2, Assists: 1, Rating: 1.75},
-				player.Player{Name: "Ronaldo", Goals: 5, Misses: 2, Assists: 1, Rating: 1.75},
-				player.Player{Name: "John", Goals: 0, Misses: 2, Assists: 1, Rating: 1.75},
-			},
-			want: []player.Player{
-				player.Player{Name: "Ronaldo", Goals: 5, Misses: 2, Assists: 1, Rating: 1.75},
-				player.Player{Name: "Kirill", Goals: 4, Misses: 2, Assists: 1, Rating: 1.75},
-				player.Player{Name: "Zakhar", Goals: 3, Misses: 2, Assists: 1, Rating: 1.75},
-				player.Player{Name: "Andrey", Goals: 2, Misses: 0, Assists: 5, Rating: 4.5},
-				player.Player{Name: "Denchik", Goals: 1, Misses: 2, Assists: 1, Rating: 1.75},
-				player.Player{Name: "John", Goals: 0, Misses: 2, Assists: 1, Rating: 1.75},
-			},
-		},
-	}
+type SortTest struct {
+	give []player.Player
+	want []player.Player
+}
 
-	for _, tc := range tests {
+var (
+	SortTestsAssert_TestSortGoals = []SortTest{
+		{
+			give: []player.Player{
+				{Name: "Andrey", Goals: 2, Misses: 0, Assists: 5, Rating: 4.5},
+				{Name: "Zakhar", Goals: 3, Misses: 2, Assists: 1, Rating: 1.75},
+				{Name: "Denchik", Goals: 1, Misses: 2, Assists: 1, Rating: 0.75},
+				{Name: "Ronaldo", Goals: 5, Misses: 2, Assists: 1, Rating: 2.75},
+				{Name: "John", Goals: 2, Misses: 2, Assists: 1, Rating: 1.25},
+			},
+			want: []player.Player{
+				{Name: "Ronaldo", Goals: 5, Misses: 2, Assists: 1, Rating: 2.75},
+				{Name: "Zakhar", Goals: 3, Misses: 2, Assists: 1, Rating: 1.75},
+				{Name: "Andrey", Goals: 2, Misses: 0, Assists: 5, Rating: 4.5},
+				{Name: "John", Goals: 2, Misses: 2, Assists: 1, Rating: 1.25},
+				{Name: "Denchik", Goals: 1, Misses: 2, Assists: 1, Rating: 0.75},
+			},
+		},
+		{
+			give: []player.Player{
+				{Name: "Andrey", Goals: 2, Misses: 0, Assists: 5, Rating: 4.5},
+				{Name: "Zakhar", Goals: 3, Misses: 2, Assists: 1, Rating: 1.75},
+				{Name: "Denchik", Goals: 1, Misses: 2, Assists: 1, Rating: 1.75},
+				{Name: "Kirill", Goals: 4, Misses: 2, Assists: 1, Rating: 1.75},
+				{Name: "Ronaldo", Goals: 5, Misses: 2, Assists: 1, Rating: 1.75},
+				{Name: "John", Goals: 0, Misses: 2, Assists: 1, Rating: 1.75},
+			},
+			want: []player.Player{
+				{Name: "Ronaldo", Goals: 5, Misses: 2, Assists: 1, Rating: 1.75},
+				{Name: "Kirill", Goals: 4, Misses: 2, Assists: 1, Rating: 1.75},
+				{Name: "Zakhar", Goals: 3, Misses: 2, Assists: 1, Rating: 1.75},
+				{Name: "Andrey", Goals: 2, Misses: 0, Assists: 5, Rating: 4.5},
+				{Name: "Denchik", Goals: 1, Misses: 2, Assists: 1, Rating: 1.75},
+				{Name: "John", Goals: 0, Misses: 2, Assists: 1, Rating: 1.75},
+			},
+		},
+	}
+	SortTestsAssert_TestSortRating = []SortTest{
+		{
+			give: []player.Player{
+				{Name: "Andrey", Goals: 2, Misses: 0, Assists: 5, Rating: 4.5},
+				{Name: "Zakhar", Goals: 3, Misses: 2, Assists: 1, Rating: 1.75},
+				{Name: "Denchik", Goals: 1, Misses: 2, Assists: 1, Rating: 0.75},
+				{Name: "Ronaldo", Goals: 5, Misses: 2, Assists: 1, Rating: 2.75},
+				{Name: "John", Goals: 2, Misses: 2, Assists: 1, Rating: 1.25},
+			},
+			want: []player.Player{
+				{Name: "Andrey", Goals: 2, Misses: 0, Assists: 5, Rating: 4.5},
+				{Name: "Ronaldo", Goals: 5, Misses: 2, Assists: 1, Rating: 2.75},
+				{Name: "Zakhar", Goals: 3, Misses: 2, Assists: 1, Rating: 1.75},
+				{Name: "John", Goals: 2, Misses: 2, Assists: 1, Rating: 1.25},
+				{Name: "Denchik", Goals: 1, Misses: 2, Assists: 1, Rating: 0.75},
+			},
+		},
+		{
+			give: []player.Player{
+				{Name: "Andrey", Goals: 2, Misses: 0, Assists: 5, Rating: 4.5},
+				{Name: "Zakhar", Goals: 3, Misses: 2, Assists: 1, Rating: 1.75},
+				{Name: "Denchik", Goals: 1, Misses: 2, Assists: 1, Rating: 0.75},
+				{Name: "Kirill", Goals: 4, Misses: 2, Assists: 1, Rating: 2.25},
+				{Name: "Ronaldo", Goals: 5, Misses: 2, Assists: 1, Rating: 2.75},
+				{Name: "John", Goals: 0, Misses: 2, Assists: 1, Rating: 1.25},
+			},
+			want: []player.Player{
+				{Name: "Andrey", Goals: 2, Misses: 0, Assists: 5, Rating: 4.5},
+				{Name: "Ronaldo", Goals: 5, Misses: 2, Assists: 1, Rating: 2.75},
+				{Name: "Kirill", Goals: 4, Misses: 2, Assists: 1, Rating: 2.25},
+				{Name: "Zakhar", Goals: 3, Misses: 2, Assists: 1, Rating: 1.75},
+				{Name: "John", Goals: 0, Misses: 2, Assists: 1, Rating: 1.25},
+				{Name: "Denchik", Goals: 1, Misses: 2, Assists: 1, Rating: 0.75},
+			},
+		},
+	}
+)
+
+func TestSortGoals(t *testing.T) {
+	for _, tc := range SortTestsAssert_TestSortGoals {
 		got := player.SortGoals(tc.give)
+		for i, gv := range got {
+			if tc.want[i] != gv {
+				t.Fatalf("%s", formatError(player.SortGoals, tc.give, gv, tc.want[i]))
+			}
+		}
+	}
+}
+
+func TestSortRating(t *testing.T) {
+	for _, tc := range SortTestsAssert_TestSortRating {
+		got := player.SortRating(tc.give)
 		for i, gv := range got {
 			if tc.want[i] != gv {
 				t.Fatalf("%s", formatError(player.SortGoals, tc.give, gv, tc.want[i]))
