@@ -7,8 +7,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var globalUsage = `Usage: football [command]
+Commands:
+  version   Print the version of the football CLI
+`
+
 var rootCmd = &cobra.Command{
-	Use: "football",
+	Use:  "football",
+	Long: globalUsage,
 	Run: func(cmd *cobra.Command, args []string) {
 		// Do Stuff Here
 	},

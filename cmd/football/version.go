@@ -15,6 +15,6 @@ var versionCmd = &cobra.Command{
 	Short: "Print the version",
 	Long:  `All software has versions.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("futball cli v0.9 -- HEAD")
+		fmt.Println("football cli v0.9 -- HEAD")
 	},
 }
