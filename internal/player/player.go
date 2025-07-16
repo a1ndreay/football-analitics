@@ -1,6 +1,7 @@
 package player
 
 import (
+	"fmt"
 	"slices"
 	"strings"
 )
@@ -11,6 +12,10 @@ type Player struct {
 	Misses  int
 	Assists int
 	Rating  float64
+}
+
+func (p Player) String() string {
+	return fmt.Sprintf("Name - %s, Goals - %d, Missles - %d, Assists - %d, Rating - %.1f", p.Name, p.Goals, p.Misses, p.Assists, p.Rating)
 }
 
 func calculateRating(goals, misses, assists int) float64 {
