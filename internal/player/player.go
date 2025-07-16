@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"slices"
 	"strings"
+	"time"
 )
 
 type Player struct {
@@ -12,6 +13,15 @@ type Player struct {
 	Misses  int
 	Assists int
 	Rating  float64
+}
+
+type CustError struct {
+	When time.Time
+	What string
+}
+
+func (e CustError) Error() string {
+	return fmt.Sprintf("at %v, %s", e.When, e.What)
 }
 
 func (p Player) String() string {
@@ -29,9 +39,12 @@ func calculateRating(goals, misses, assists int) float64 {
 	return r
 }
 
-func NewPlayer(name string, goals, misses, assists int) Player {
+func NewPlayer(name string, goals, misses, assists int) (*Player, error) {
+	if len(name) == 0 || goals < 0 || misses < 0 || assists < 0 {
+		return nil, &CustError{When: time.Now(), What: "invalid player parameters"}
+	}
 	r := calculateRating(goals, misses, assists)
-	return Player{Name: name, Goals: goals, Misses: misses, Assists: assists, Rating: r}
+	return &Player{Name: name, Goals: goals, Misses: misses, Assists: assists, Rating: r}, nil
 }
 
 func SortGoals(players []Player) []Player {

@@ -29,19 +29,19 @@ func formatError(testFunc interface{}, give, got, want any) string {
 func TestNewPlayer(t *testing.T) {
 	tests := []struct {
 		give NewPlayerArgs
-		want player.Player
+		want *player.Player
 	}{
 		{
 			NewPlayerArgs{Name: "Andrey", Goals: 2, Misses: 0, Assists: 5},
-			player.Player{Name: "Andrey", Goals: 2, Misses: 0, Assists: 5, Rating: 4.5},
+			&player.Player{Name: "Andrey", Goals: 2, Misses: 0, Assists: 5, Rating: 4.5},
 		},
 		{
 			NewPlayerArgs{Name: "Zakhar", Goals: 3, Misses: 2, Assists: 1},
-			player.Player{Name: "Zakhar", Goals: 3, Misses: 2, Assists: 1, Rating: 1.75},
+			&player.Player{Name: "Zakhar", Goals: 3, Misses: 2, Assists: 1, Rating: 1.75},
 		},
 	}
 	for _, tc := range tests {
-		got := player.NewPlayer(tc.give.Name, tc.give.Goals, tc.give.Misses, tc.give.Assists)
+		got, _ := player.NewPlayer(tc.give.Name, tc.give.Goals, tc.give.Misses, tc.give.Assists)
 		if got != tc.want {
 			t.Fatalf("%s", formatError(player.NewPlayer, tc.give, got, tc.want))
 		}
